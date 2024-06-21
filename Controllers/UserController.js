@@ -2,7 +2,7 @@
 class UserController{
     async index(req, res){
         var users = await User.findAll();
-        res.json(users);s
+        res.json(users);
     }
     async create(req, res){
         var {email, name} = req.body;
