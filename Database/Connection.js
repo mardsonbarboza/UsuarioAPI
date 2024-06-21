@@ -5,7 +5,7 @@ var knex = require('knex')({
       host : '127.0.0.1',
       user : 'root',
       password : 'root',
-      database : 'apiuser'
+      database : 'user'
     }
   });
 //exportando o knex para os outros arquivos e ser utilizado
