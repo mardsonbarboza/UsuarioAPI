@@ -1,36 +1,40 @@
-
+const User = require('../Models/User')
 class UserController{
     async index(req, res){
-        var users = await User.findAll();
+        var users = await User.FindAll();
         res.json(users);
     }
     async create(req, res){
-        var {email, name} = req.body;
+        var {nome, email} = req.body;
         
         if(email == undefined){
             res.status(400);
             res.json({err: "O e-mail é inválido!"})
             return;
+        }else{
+            var emailExists = await User.FindByEmail(email);
+
+            if(emailExists){
+                res.status(406);
+                res.json({err: "O e-mail já está cadastrado!"})
+                return;
+            }else{
+                await User.new(nome,email);
+            
+                res.status(200);
+                res.send("Tudo OK!");
+            }
+    
+            
+            
         }
 
-        var emailExists = await User.findEmail(email);
-
-        if(emailExists){
-            res.status(406);
-            res.json({err: "O e-mail já está cadastrado!"})
-            return;
-        }
-
-        
-        await User.new(email,name);
-        
-        res.status(200);
-        res.send("Tudo OK!");
+       
     }
 
     async findUser(req, res){
         var id = req.params.id;
-        var user =  await User.findById(id);
+        var user =  await User.FindById(id);
 
         if(user == undefined){
             res.status(404);
@@ -43,8 +47,8 @@ class UserController{
 
     async edit(req,res){
 
-        var {id,name,email} = req.body;
-        var result = await User.update(id,email,name);
+        var {id,nome,email} = req.body;
+        var result = await User.Update(id,email,nome);
 
         if(result != undefined){
             if(result.status){
