@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
-var bodyParser = require('body-parser');
-
+const bodyParser = require('body-parser');
+const router = require('./Routers/UserRouter')
 //configuração do body-parser
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
