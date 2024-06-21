@@ -1,6 +1,7 @@
 
 class UserController{
-    async FindUsers(){
-
+    async FindUsers(req,res){
+        
     }
 }
+module.exports = new UserController
