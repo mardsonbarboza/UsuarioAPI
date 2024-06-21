@@ -3,23 +3,38 @@ const knex = require("../Database/Connection");
 
 class User{
     async FindAll(){
-
-        try {
-            var result = await knex.select("*").table('users')
+       try {
+        var result = await knex.select("*").table('users')
             return result
-        } catch (error) {
-            console.log(error)
+            
+            
+       } catch (error) {
             return []
-        }
+       }
+            
        
+    }
+    async new(nome,email){
+        try {
+
+            await knex.insert({nome:nome,email:email}).table("users");
+        } catch (err) {
+            console.log(err);
+        }
+      
     }
     async FindByEmail(email){
         try {
             var result = await knex.select("*").table('users').where({email:email})
-            return result
+            if(result.length > 0){
+                return true
+            }else{
+                return false
+            }
+            
         } catch (error) {
             console.log(error)
-            return {status: false, msg:'Email não encontrado, tente novamente'}       
+            return error      
          }
     }
     async FindById(id){
@@ -49,16 +64,16 @@ class User{
             return {status: false, err: "O usuario não existe, por tanto não pode ser deletado"}
         }
     }
-    async update(id, email, name){
+    async Update(id, email, nome){
 
-        var user = await this.findById(id);
+        var user = await this.FindById(id);
         parseInt(user);
         if(user != undefined){
 
             var editUser = {};
             if(email != undefined){
                 if(email != user.email){
-                    var result =  await this.findEmail(email)
+                    var result =  await this.FindEmail(email)
                     if(result == false){
                         editUser.email = email;
                     }else{
@@ -68,13 +83,11 @@ class User{
 
             }
 
-            if(name != undefined){
-                editUser.name = name;
+            if(nome != undefined){
+                editUser.nome = nome;
             }
 
-            if(role != undefined){
-                editUser.role = role
-            }
+            
             try {  
                 await knex.update(editUser).table("users").where({id: id})
                 return {status: true}
@@ -90,3 +103,5 @@ class User{
 
     }
 }
+
+module.exports = new User
