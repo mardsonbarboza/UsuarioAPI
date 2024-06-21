@@ -1,5 +1,9 @@
 
 class UserController{
+    async index(req, res){
+        var users = await User.findAll();
+        res.json(users);s
+    }
     async create(req, res){
         var {email, name} = req.body;
         
@@ -23,7 +27,7 @@ class UserController{
         res.status(200);
         res.send("Tudo OK!");
     }
-    
+
     async findUser(req, res){
         var id = req.params.id;
         var user =  await User.findById(id);
